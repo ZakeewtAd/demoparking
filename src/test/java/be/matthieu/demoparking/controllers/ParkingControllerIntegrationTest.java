@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,8 +23,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Profile("local")
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { DemoParkingApplication.class })
+@TestPropertySource("classpath:application.properties")
+@ContextConfiguration(classes = {DemoParkingApplication.class})
 @WebAppConfiguration
 class ParkingControllerIntegrationTest {
 
@@ -39,13 +43,13 @@ class ParkingControllerIntegrationTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 
         parkingService.deleteAll();
-        parkingService.saveOrUpdate(new Parking(10L, "10 Places parking"));
-        parkingService.saveOrUpdate(new Parking(30L, "Confluence"));
+        parkingService.saveOrUpdate(new Parking(null, "10 Places parking",10L,  null));
+        parkingService.saveOrUpdate(new Parking(null, "Confluence", 30L, null));
     }
 
     @Test
     void listParkingTest() throws Exception {
-            this.mockMvc
+        this.mockMvc
                 .perform(get("/parking"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -58,9 +62,13 @@ class ParkingControllerIntegrationTest {
     void createParkingTest() throws Exception {
         this.mockMvc
                 .perform(
-                    post("/parking")
-                        .content("{ \"name\": \"My Super Parking\", \"maxCapacity\": 400 }")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        post("/parking")
+                                .content("""
+                                        {
+                                            "name": "My Super Parking",
+                                            "maxCapacity": 400
+                                        }""")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

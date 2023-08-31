@@ -1,7 +1,9 @@
 package be.matthieu.demoparking.dtos;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Data
-public class ParkedCarDto {
+import java.time.LocalDateTime;
+
+public record ParkedCarDto(String plate,
+                           @JsonFormat(pattern = "yyyy/MM/dd - HH:mm:ss") LocalDateTime parkedSince) {
 }

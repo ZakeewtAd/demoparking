@@ -2,16 +2,15 @@ package be.matthieu.demoparking.service;
 
 import be.matthieu.demoparking.repository.dao.ParkingDao;
 import be.matthieu.demoparking.repository.models.Parking;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ParkingService {
     private final ParkingDao parkingDao;
 
-    @Autowired
     public ParkingService(ParkingDao parkingDao){
         this.parkingDao = parkingDao;
     }
@@ -26,5 +25,9 @@ public class ParkingService {
 
     public void deleteAll() {
         parkingDao.deleteAll();
+    }
+
+    public Optional<Parking> findById(Long parkingId) {
+        return parkingDao.findById(parkingId);
     }
 }

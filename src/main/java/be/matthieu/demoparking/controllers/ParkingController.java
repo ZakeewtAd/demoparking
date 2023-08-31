@@ -1,6 +1,7 @@
 package be.matthieu.demoparking.controllers;
 
 import be.matthieu.demoparking.business.ParkingBusinessManager;
+import be.matthieu.demoparking.dtos.ParkedCarDto;
 import be.matthieu.demoparking.dtos.ParkingDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +25,18 @@ public class ParkingController {
         return parkingBusinessManager.getAllParking();
     }
 
+    @GetMapping("/{parkingId}")
+    public ParkingDto getParking(@PathVariable("parkingId") Long parkingId){
+        return parkingBusinessManager.findParkingById(parkingId);
+    }
     @ResponseBody
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ParkingDto createParking(@RequestBody ParkingDto parkingDto) {
         return parkingBusinessManager.saveOrUpdate(parkingDto);
     }
 
-    @DeleteMapping
-    public void removeParking() {
-        // does nothing yet
+    @PostMapping("/{parkingId}/parkCar/{plate}")
+    public ParkedCarDto parkCar(@PathVariable("parkingId") Long parkingId, @PathVariable("plate") String plate) {
+        return parkingBusinessManager.parkCar(parkingId, plate);
     }
 }
