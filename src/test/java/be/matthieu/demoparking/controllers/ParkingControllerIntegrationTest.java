@@ -3,6 +3,7 @@ package be.matthieu.demoparking.controllers;
 import be.matthieu.demoparking.DemoParkingApplication;
 import be.matthieu.demoparking.repository.models.Parking;
 import be.matthieu.demoparking.service.ParkingService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,10 +42,13 @@ class ParkingControllerIntegrationTest {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-
-        parkingService.deleteAll();
         parkingService.saveOrUpdate(new Parking(null, "10 Places parking",10L,  null));
         parkingService.saveOrUpdate(new Parking(null, "Confluence", 30L, null));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        parkingService.deleteAll();
     }
 
     @Test

@@ -1,11 +1,13 @@
 package be.matthieu.demoparking.service;
 
 import be.matthieu.demoparking.dtos.ParkedCarDto;
+import be.matthieu.demoparking.exceptions.NotExistingCarException;
 import be.matthieu.demoparking.exceptions.NotExistingParkingException;
 import be.matthieu.demoparking.mappers.ParkedCarMapper;
 import be.matthieu.demoparking.repository.dao.ParkedCarDao;
 import be.matthieu.demoparking.repository.models.ParkedCar;
 import be.matthieu.demoparking.repository.models.Parking;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +34,9 @@ public class ParkedCarService {
     }
 
     public void removeCar(ParkedCar parkedCar) {
+       if(!parkedCarDao.exists(Example.of(parkedCar))) {
+           throw new NotExistingCarException();
+       }
         parkedCarDao.delete(parkedCar);
     }
 

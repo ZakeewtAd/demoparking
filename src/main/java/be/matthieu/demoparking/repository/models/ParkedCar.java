@@ -1,9 +1,7 @@
 package be.matthieu.demoparking.repository.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -15,6 +13,8 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ParkedCar {
     @Id
     String plate;
